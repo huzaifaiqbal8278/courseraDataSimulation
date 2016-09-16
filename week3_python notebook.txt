@@ -29,10 +29,15 @@ Training Dataset creation
 totuserbuy = userbuy.groupby('userId').sum()
 totuserbuy = totuserbuy.reset_index()
 totuserbuy.columns = ['userId','totalpurchase']
-useravghit = userclicks.groupby('userId').avg()
+useravghit = userclicks.groupby('userId').mean()
 useravghit = useravghit.reset_index()
 useravghit.columns = ['userId','avgishit']
-useravgstrength = userstrength.groupby('userId').avg()
+useravgstrength = userstrength.groupby('userId').mean()
 useravgstrength = useravgstrength.reset_index()
 useravgstrength.columns = ['userId','avgstrength']
 
+combinedDF = totuserbuy.merge(useravghit, on='userId')
+combinedDF = combinedDF.merge(useravgstrength, on='userId')
+
+trainingDF = combinedDF[['avgishit','avgstrength','totalpurchase']]
+trainingDF.shape
