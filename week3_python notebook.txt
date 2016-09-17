@@ -41,3 +41,13 @@ combinedDF = combinedDF.merge(useravgstrength, on='userId')
 
 trainingDF = combinedDF[['avgishit','avgstrength','totalpurchase']]
 trainingDF.shape
+
+
+sqlContext = SQLContext(sc)
+pDF = sqlContext.createDataFrame(trainingDF)
+parsedData = pDF.rdd.map(lambda line: array([line[0], line[1], line[2])) 
+
+my_kmmodel = KMeans.train(parsedData, 2, maxIterations=10, runs=10, initializationMode="random")
+
+print(my_kmmodel.centers)
+
